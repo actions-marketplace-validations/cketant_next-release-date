@@ -1,0 +1,20 @@
+name: Next Release Date
+author: Chris Ketant
+description: Get the next date for the Release based on schedule
+branding:
+  icon: archive
+  color: green
+inputs:
+  releaseDays:
+    description: Comma separated list of numbers representing day of the week that the Release Candidate is generated. `0=Sunday`, `1=Monday`, `2=Tuesday`, etc. 0-6.
+    required: true
+outputs:
+  next_rc_day_of_week:
+    description: The day of the week (i.e. Monday, Tuesday, Wednesday, etc) that the next Release Candidate will get generated. 
+  next_rc_date_title:
+    description: Get the date for the next Release Candidate MM-DD-YYYY
+  next_rc_date_iso:
+    description: Get the date for the next Release Candidate in ISO format
+runs:
+  using: node16
+  main: dist/index.js
