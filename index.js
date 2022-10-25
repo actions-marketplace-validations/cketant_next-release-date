@@ -1,6 +1,11 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
+/*
+ * Week days according to the indexing
+ */
+const WEEK_DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+
 /**
  * Get the next valid Release Candidate date
  *
@@ -25,7 +30,7 @@ const run = async () => {
 
     // Input Validation
     if (releaseDaysString.length == 0) {
-      core.setFailed('Invalid input please provide a comma separated string')
+      core.setFailed('Invalid input please provide a comma separated string with numbers')
       return
     }
 
@@ -36,6 +41,8 @@ const run = async () => {
         return
 			}
 		})
+
+    console.log(`The release days are: ${releaseDays.map(d => WEEK_DAYS[d])}...`)
 
 		// 1. Get the next valid RC date
 		const nextRCDueDate = nextRCValidDate(releaseDays)
@@ -54,8 +61,7 @@ const run = async () => {
         const nextRCDateTitle = [month, day, year].join('-')
 
         // 3. Get Day of week
-        const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
-        const nextRCDayOfWeek = weekday[nextRCDueDate.getDay()]
+        const nextRCDayOfWeek = WEEK_DAYS[nextRCDueDate.getDay()]
 
         // 4. Set Output 
         core.setOutput('next_rc_day_of_week', nextRCDayOfWeek)
