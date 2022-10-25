@@ -10455,7 +10455,7 @@ const run = async () => {
 			}
 		})
 
-    console.log(`The release days are: ${releaseDays.map(d => WEEK_DAYS[d])}...`)
+    console.log(`The provided release days are: ${releaseDays.map(d => WEEK_DAYS[d])}...`)
 
 		// 1. Get the next valid RC date
 		const nextRCDueDate = nextRCValidDate(releaseDays)
