@@ -40,9 +40,8 @@ Get the date for the next Release Candidate in ISO format
 ## Example usage
 ```
 steps:
-      - name: Next RC Date
-        uses: ./.github/actions/next-release-date
+      - name: Next Release Date
+        uses: cketant/next-release-date@v1.0.0
         with:
           releaseDays: "1,2,3,4,5"
-
 ```

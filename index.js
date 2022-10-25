@@ -21,15 +21,19 @@ const nextRCValidDate = (releaseDays) => {
 const run = async () => {
 	try {
 		// Get Input
-		const releaseDaysString = core.getInput('releaseDays') // comma separated days
-		const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
+    const releaseDaysString = core.getInput('releaseDays') // comma separated days
 
-		if (releaseDays.length == 0) {
-			core.error('Invalid input please provide a comma separated string')
-		}
+    // Input Validation
+    if (releaseDaysString.length == 0) {
+      core.setFailed('Invalid input please provide a comma separated string')
+      return
+    }
+
+		const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
 		releaseDays.forEach(day => {
 			if (day > 6) {
-				core.error('Invalid input please provide a number that is 0-6')		
+				core.setFailed('Invalid input please provide a number that is 0-6')
+        return
 			}
 		})
 
@@ -58,6 +62,7 @@ const run = async () => {
         core.setOutput('next_rc_date_title', nextRCDateTitle)
         core.setOutput('next_rc_date_iso', nextRCDueDate.toISOString())
 	} catch (error) {
+    core.debug(error)
 		core.setFailed(error)
 	}
 }
