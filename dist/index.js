@@ -10434,7 +10434,7 @@ const nextRCValidDate = (releaseDays) => {
 const run = async () => {
 	try {
 		// Get Input
-    const releaseDaysString = "0,2"//core.getInput('releaseDays') // comma separated days
+    const releaseDaysString = core.getInput('releaseDays') // comma separated days
 
     // Input Validation
     if (releaseDaysString.length == 0) {
