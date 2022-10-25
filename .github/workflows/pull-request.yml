@@ -14,7 +14,7 @@ jobs:
         run: |
           echo ::set-output name=repo_owner::${GITHUB_REPOSITORY_OWNER}
           echo ::set-output name=repo_name::${GITHUB_REPOSITORY#*/}
-      - name: Get RC Milestone
+      - name: Test Action
         id: result
         uses: cketant/next-release-date@v1.0.1
         with:
