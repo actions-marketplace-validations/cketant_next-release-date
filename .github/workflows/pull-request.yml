@@ -16,7 +16,7 @@ jobs:
           echo ::set-output name=repo_name::${GITHUB_REPOSITORY#*/}
       - name: Get RC Milestone
         id: result
-        uses: cketant/next-release-date@v1.0.0
+        uses: cketant/next-release-date@update
         with:
           releaseDays: "1,2,3,4,5"
       - name: Print Results
