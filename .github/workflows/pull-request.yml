@@ -1,0 +1,26 @@
+name: pull_request
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  test_action_job:
+    name: Test Action Job
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Get GH vars
+        id: gh_vars
+        run: |
+          echo ::set-output name=repo_owner::${GITHUB_REPOSITORY_OWNER}
+          echo ::set-output name=repo_name::${GITHUB_REPOSITORY#*/}
+      - name: Test Action
+        id: result
+        uses: cketant/next-release-date@v1.0.1
+        with:
+          releaseDays: "1,2,3,4,5"
+      - name: Print Results
+        run: |
+          echo "${{ steps.result.outputs.next_rc_day_of_week }}"
+          echo "${{ steps.result.outputs.next_rc_date_title }}"
+          echo "${{ steps.result.outputs.next_rc_date_iso }}"

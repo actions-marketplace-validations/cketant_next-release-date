@@ -1,6 +1,11 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
+/*
+ * Week days according to the indexing
+ */
+const WEEK_DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+
 /**
  * Get the next valid Release Candidate date
  *
@@ -21,17 +26,23 @@ const nextRCValidDate = (releaseDays) => {
 const run = async () => {
 	try {
 		// Get Input
-		const releaseDaysString = core.getInput('releaseDays') // comma separated days
-		const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
+    const releaseDaysString = core.getInput('releaseDays') // comma separated days
 
-		if (releaseDays.length == 0) {
-			core.error('Invalid input please provide a comma separated string')
-		}
+    // Input Validation
+    if (releaseDaysString.length == 0) {
+      core.setFailed('Invalid input please provide a comma separated string with numbers')
+      return
+    }
+
+		const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
 		releaseDays.forEach(day => {
 			if (day > 6) {
-				core.error('Invalid input please provide a number that is 0-6')		
+				core.setFailed('Invalid input please provide a number that is 0-6')
+        return
 			}
 		})
+
+    console.log(`The provided release days are: ${releaseDays.map(d => WEEK_DAYS[d])}...`)
 
 		// 1. Get the next valid RC date
 		const nextRCDueDate = nextRCValidDate(releaseDays)
@@ -50,14 +61,14 @@ const run = async () => {
         const nextRCDateTitle = [month, day, year].join('-')
 
         // 3. Get Day of week
-        const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
-        const nextRCDayOfWeek = weekday[nextRCDueDate.getDay()]
+        const nextRCDayOfWeek = WEEK_DAYS[nextRCDueDate.getDay()]
 
         // 4. Set Output 
         core.setOutput('next_rc_day_of_week', nextRCDayOfWeek)
         core.setOutput('next_rc_date_title', nextRCDateTitle)
         core.setOutput('next_rc_date_iso', nextRCDueDate.toISOString())
 	} catch (error) {
+    core.debug(error)
 		core.setFailed(error)
 	}
 }
