@@ -13,19 +13,19 @@ const WEEK_DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","
  * @return - Date
  * */
 const nextRCValidDate = (releaseDays) => {
-	// 1. Loop through the next 7 days to find the next Release Day
+  // 1. Loop through the next 7 days to find the next Release Day
     var potentialDay = new Date()
     for (var i = 0; i < 7; i++) {
-    	potentialDay.setDate(potentialDay.getDate() + 1) // start with tomorrow so we don't return today
-    	if (releaseDays.includes(potentialDay.getDay())) {
-    		return potentialDay
-    	}
+      potentialDay.setDate(potentialDay.getDate() + 1) // start with tomorrow so we don't return today
+      if (releaseDays.includes(potentialDay.getDay())) {
+        return potentialDay
+      }
     }
 }
 
 const run = async () => {
-	try {
-		// Get Input
+  try {
+    // Get Input
     const releaseDaysString = core.getInput('releaseDays') // comma separated days
 
     // Input Validation
@@ -34,18 +34,19 @@ const run = async () => {
       return
     }
 
-		const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
-		releaseDays.forEach(day => {
-			if (day > 6) {
-				core.setFailed('Invalid input please provide a number that is 0-6')
+    const releaseDays = releaseDaysString.split(",").map(d => Number(d)).sort()
+    releaseDays.forEach(day => {
+      if (day > 6) {
+        core.setFailed('Invalid input please provide a number that is 0-6')
         return
-			}
-		})
+      }
+    })
 
     console.log(`The provided release days are: ${releaseDays.map(d => WEEK_DAYS[d])}...`)
 
-		// 1. Get the next valid RC date
-		const nextRCDueDate = nextRCValidDate(releaseDays)
+        // 1. Get the next valid RC date
+        const nextRCDueDate = nextRCValidDate(releaseDays)
+        nextRCDueDate.setHours(16) // set the hours to avoid edges spill over into next days when converting
 
         // 2. Output MM-DD-YYYY
         var month = '' + (nextRCDueDate.getMonth() + 1)
@@ -67,10 +68,10 @@ const run = async () => {
         core.setOutput('next_rc_day_of_week', nextRCDayOfWeek)
         core.setOutput('next_rc_date_title', nextRCDateTitle)
         core.setOutput('next_rc_date_iso', nextRCDueDate.toISOString())
-	} catch (error) {
+  } catch (error) {
     core.debug(error)
-		core.setFailed(error)
-	}
+    core.setFailed(error)
+  }
 }
 
 run()
